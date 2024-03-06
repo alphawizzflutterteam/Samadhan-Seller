@@ -2,8 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:animated_widgets/animated_widgets.dart';
-import 'package:dotted_border/dotted_border.dart';
-
 import 'package:flutter/material.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -16,7 +14,6 @@ import 'package:ziberto_vendor/Helper/Color.dart';
 import 'package:ziberto_vendor/Helper/Constant.dart';
 import 'package:ziberto_vendor/Helper/Session.dart';
 import 'package:ziberto_vendor/Helper/String.dart';
-import 'package:ziberto_vendor/Helper/images.dart';
 import 'package:ziberto_vendor/Helper/myappbar.dart';
 import 'package:ziberto_vendor/Model/getWithdrawelRequest/getWithdrawelmodel.dart';
 import 'package:permission_handler/permission_handler.dart' as Per;
