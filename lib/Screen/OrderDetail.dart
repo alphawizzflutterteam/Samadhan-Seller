@@ -7,10 +7,11 @@ import 'package:ziberto_vendor/Helper/String.dart';
 import 'package:ziberto_vendor/Model/OrdersModel/OrderItemsModel.dart';
 import 'package:ziberto_vendor/Model/OrdersModel/OrderModel.dart';
 import 'package:ziberto_vendor/Model/Person/PersonModel.dart';
-import 'package:ziberto_vendor/Screen/Home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../NewScreen/home_screen.dart';
 
 class OrderDetail extends StatefulWidget {
   // final Order_Model? model;

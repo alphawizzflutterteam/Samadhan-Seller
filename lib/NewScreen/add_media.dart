@@ -3,8 +3,10 @@ import 'dart:io';
 
 import 'package:animated_widgets/animated_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:image_picker_gallery_camera/image_picker_gallery_camera.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -226,6 +228,8 @@ class _AddMediaState extends State<AddMedia> {
       }
     }
   }
+
+
 
   Future<void> submitSubscription() async {
     await App.init();

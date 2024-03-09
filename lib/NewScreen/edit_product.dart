@@ -17,13 +17,14 @@ import 'package:ziberto_vendor/Model/ProductModel/Variants.dart';
 import 'package:ziberto_vendor/Model/TaxesModel/TaxesModel.dart';
 import 'package:ziberto_vendor/Model/ZipCodesModel/ZipCodeModel.dart';
 import 'package:ziberto_vendor/Screen/Add_Product.dart';
-import 'package:ziberto_vendor/Screen/Home.dart';
 import 'package:ziberto_vendor/Helper/inputChipUxScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:sticky_headers/sticky_headers.dart';
 import 'package:ziberto_vendor/Screen/Media.dart';
+
+import 'home_screen.dart';
 
 
 class EditProduct extends StatefulWidget {

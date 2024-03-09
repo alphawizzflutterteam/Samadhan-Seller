@@ -20,7 +20,8 @@ import 'package:ziberto_vendor/Helper/Constant.dart';
 import 'package:ziberto_vendor/Helper/Session.dart';
 import 'package:ziberto_vendor/Helper/String.dart';
 import 'package:ziberto_vendor/Helper/images.dart';
-import 'package:ziberto_vendor/Screen/Home.dart';
+
+import 'home_screen.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);

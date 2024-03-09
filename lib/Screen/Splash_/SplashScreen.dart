@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:ziberto_vendor/Helper/Session.dart';
 import 'package:ziberto_vendor/Helper/String.dart';
+import 'package:ziberto_vendor/NewScreen/home_screen.dart';
 import 'package:ziberto_vendor/Screen/Authentication/Login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-import '../Home.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -82,7 +82,7 @@ class _SplashScreenState extends State<SplashScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => Home(),
+          builder: (context) => HomeScreen(),
         ),
       );
     } else {

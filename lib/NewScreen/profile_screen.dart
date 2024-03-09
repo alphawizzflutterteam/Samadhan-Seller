@@ -30,7 +30,6 @@ import 'package:ziberto_vendor/Screen/Customers.dart';
 import 'package:ziberto_vendor/Screen/ProductList.dart';
 import 'package:ziberto_vendor/Screen/TermFeed/Terms_Conditions.dart';
 
-import '../Screen/Home.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);

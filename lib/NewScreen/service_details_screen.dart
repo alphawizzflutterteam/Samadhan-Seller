@@ -22,10 +22,11 @@ import 'package:ziberto_vendor/Model/OrdersModel/OrderModel.dart';
 import 'package:ziberto_vendor/Model/Person/PersonModel.dart';
 import 'package:ziberto_vendor/NewScreen/bottom_bar.dart';
 import 'package:ziberto_vendor/NewScreen/chat_page.dart';
-import 'package:ziberto_vendor/Screen/Home.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:ziberto_vendor/Screen/OrderDetail.dart';
 import 'package:ziberto_vendor/Screen/OrderList.dart';
+
+import 'home_screen.dart';
 
 List<PersonModel> delBoyList = [];
 
@@ -49,8 +50,8 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
   List<String> statusList = [
     PLACED,
     PROCESSED,
-    /* SHIPED,
-    DELIVERD,*/
+    SHIPED,
+    // DELIVERD,
     CANCLED,
     RETURNED,
   ];

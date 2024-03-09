@@ -16,7 +16,6 @@ import 'package:ziberto_vendor/NewScreen/bottom_bar.dart';
 import 'package:ziberto_vendor/NewScreen/forget_screen.dart';
 import 'package:ziberto_vendor/NewScreen/home_screen.dart';
 import 'package:ziberto_vendor/NewScreen/signup_screen.dart';
-import 'package:ziberto_vendor/Screen/Home.dart';
 
 
 

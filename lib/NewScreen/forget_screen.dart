@@ -16,11 +16,11 @@ import 'package:ziberto_vendor/Helper/Session.dart';
 import 'package:ziberto_vendor/Helper/String.dart';
 import 'package:ziberto_vendor/Helper/images.dart';
 import 'package:ziberto_vendor/Screen/Authentication/VerifyOTP.dart';
-import 'package:ziberto_vendor/Screen/Home.dart';
 
 import '../Helper/Color.dart';
 import '../Helper/Color.dart';
 import 'change_password_screen.dart';
+import 'home_screen.dart';
 
 
 class ForgetScreen extends StatefulWidget {

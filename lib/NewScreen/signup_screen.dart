@@ -14,6 +14,7 @@ import 'package:flutter_geocoder/model.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:image_picker_gallery_camera/image_picker_gallery_camera.dart';
 import 'package:location/location.dart';
 import 'package:open_file/open_file.dart';
@@ -26,13 +27,13 @@ import 'package:sizer/sizer.dart';
 import "package:http/http.dart" as http;
 import 'package:ziberto_vendor/Helper/Color.dart';
 import 'package:ziberto_vendor/NewScreen/customDialog.dart';
-import 'package:ziberto_vendor/Screen/Home.dart';
 import '../Helper/ApiBaseHelper.dart';
 import '../Helper/Constant.dart';
 import '../Helper/Session.dart';
 import '../Helper/images.dart';
 import 'package:path/path.dart' as path;
 import 'bottom_bar.dart';
+import 'home_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   SignUpScreen({Key? key}) : super(key: key);
@@ -160,7 +161,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                               });
                             }
                             setState(() {
-                              enabled =false;
+                              enabled = false;
                             });
                           },
                         ),
@@ -228,7 +229,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                                     "Commission Field Required", context);
                                 return;
                               }
-                              if (lat!='') {
+                              if (lat != '') {
                                 setState(() {
                                   activeStep++;
                                 });
@@ -285,10 +286,9 @@ class _SignUpScreenState extends State<SignUpScreen>
                               setState(() {
                                 activeStep++;
                               });
-                            }else{
+                            } else {
                               if (gstImage == null) {
-                                setSnackbar(
-                                    "GST Image Required", context);
+                                setSnackbar("GST Image Required", context);
                                 return;
                               }
                               if (foodImage == null) {
@@ -297,8 +297,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                                 return;
                               }
                               if (proofImage == null) {
-                                setSnackbar(
-                                    "Identity Image Required", context);
+                                setSnackbar("Identity Image Required", context);
                                 return;
                               }
                               if (addressImage == null) {
@@ -306,13 +305,14 @@ class _SignUpScreenState extends State<SignUpScreen>
                                     "Address Proof Image Required", context);
                                 return;
                               }
-                              if(!accept){
+                              if (!accept) {
                                 setSnackbar(
-                                    "Please accept terms and conditions", context);
+                                    "Please accept terms and conditions",
+                                    context);
                                 return;
                               }
                               setState(() {
-                                enabled =true;
+                                enabled = true;
                               });
                               submitSubscription();
                             }
@@ -1443,33 +1443,42 @@ class _SignUpScreenState extends State<SignUpScreen>
       getCropImage(context, image, i);
     });
   }
+
   String doc = "";
-  getAgreement(){
-    apiBaseHelper.postAPICall(Uri.parse("https://entemarket.com/app/v1/api/get_seller_agreement"), {}).then((value) {
-          Map data = value;
-          String url = data['image_url'];
-          var temp = data['data'];
-          if(!data['error']){
-            setState(() {
-              doc = "https://entemarket.com/"+temp[0]['agreement_doc'];
-            });
-            downloadFile(doc,"agreement.pdf");
-            print("ok"+doc);
-          }
+  getAgreement() {
+    apiBaseHelper.postAPICall(
+        Uri.parse("https://entemarket.com/app/v1/api/get_seller_agreement"),
+        {}).then((value) {
+      Map data = value;
+      String url = data['image_url'];
+      var temp = data['data'];
+      if (!data['error']) {
+        setState(() {
+          doc = "https://entemarket.com/" + temp[0]['agreement_doc'];
+        });
+        downloadFile(doc, "agreement.pdf");
+        print("ok" + doc);
+      }
     });
   }
+
   String filePath = "";
-  downloadFile(String url, String fileName,) async {
+  downloadFile(
+    String url,
+    String fileName,
+  ) async {
     HttpClient httpClient = new HttpClient();
     File file;
     //String filePath = '';
     String myUrl = '';
     String dir = (await getApplicationSupportDirectory()).path;
-    print("ok"+dir);
-    var request = await httpClient.getUrl(Uri.parse(url),);
+    print("ok" + dir);
+    var request = await httpClient.getUrl(
+      Uri.parse(url),
+    );
     var response = await request.close();
-    print("ok"+response.statusCode.toString());
-    if(response.statusCode == 200) {
+    print("ok" + response.statusCode.toString());
+    if (response.statusCode == 200) {
       var bytes = await consolidateHttpClientResponseBytes(response);
       print(bytes);
 
@@ -1481,19 +1490,17 @@ class _SignUpScreenState extends State<SignUpScreen>
       setState(() {
         filePath = file.path;
       });
-
-    }
-    else
-      filePath = 'Error code: '+response.statusCode.toString();
-    try {
-
-    }
-    catch(ex){
+    } else
+      filePath = 'Error code: ' + response.statusCode.toString();
+    try {} catch (ex) {
       filePath = 'Can not fetch url';
-    }}
+    }
+  }
+
   void getCropImage(BuildContext context, var image, int i) async {
     File? croppedFile = await ImageCropper().cropImage(
         sourcePath: image.path,
+        compressQuality: 90,
         aspectRatioPresets: [
           CropAspectRatioPreset.square,
           CropAspectRatioPreset.ratio3x2,
@@ -1529,8 +1536,7 @@ class _SignUpScreenState extends State<SignUpScreen>
     });
   }
 
-  Future<void> submitSubscription(
-      ) async {
+  Future<void> submitSubscription() async {
     await App.init();
 
     ///MultiPart request
@@ -1585,83 +1591,79 @@ class _SignUpScreenState extends State<SignUpScreen>
     );
     request.headers.addAll(headers);
     request.fields.addAll({
-    "name":nameController.text.toString(),
-    "email":emailController.text.toString(),
-    "mobile":phoneController.text.toString(),
-    "password":passController.text.toString(),
-    "address":addController.text.toString(),
-    "store_name":sellerController.text.toString(),
-    "tax_name":taxNameController.text.toString(),
-    "tax_number":taxController.text.toString(),
-    "status":"0",
-    "commission_data":comController.text.toString(),
-    "pan_number":panController.text.toString(),
-    "bank_name":bankController.text.toString(),
-    "bank_code":codeController.text.toString(),
-    "account_name":holderController.text.toString(),
-    "account_number":numberController.text.toString(),
-    "store_description":descController.text.toString(),
-    "store_url":urlController.text.toString(),
-    "global_commission":"",
-    "permissions":"",
-    "categories":""
+      "name": nameController.text.toString(),
+      "email": emailController.text.toString(),
+      "mobile": phoneController.text.toString(),
+      "password": passController.text.toString(),
+      "address": addController.text.toString(),
+      "store_name": sellerController.text.toString(),
+      "tax_name": taxNameController.text.toString(),
+      "tax_number": taxController.text.toString(),
+      "status": "0",
+      "commission_data": comController.text.toString(),
+      "pan_number": panController.text.toString(),
+      "bank_name": bankController.text.toString(),
+      "bank_code": codeController.text.toString(),
+      "account_name": holderController.text.toString(),
+      "account_number": numberController.text.toString(),
+      "store_description": descController.text.toString(),
+      "store_url": urlController.text.toString(),
+      "global_commission": "",
+      "permissions": "",
+      "categories": ""
     });
     print(request.fields);
     print("request: " + request.toString());
-     request.send().then((res)async {
-       print("This is response:" + res.toString());
-       if (res.statusCode == 200) {
-         setState(() {
-           enabled =false;
-         });
-         final respStr = await res.stream.bytesToString();
-         print(respStr.toString());
-         Map data = jsonDecode(respStr.toString());
-         print(data);
-         if(!data['error']){
-
-           setState(() {
-             setSnackbar(data['message'].toString(), context);
-           });
-           Navigator.pop(context);
-           showDialog(
-             context: context,
-             builder: (context) => CustomDialog(
-               content: Text(
-                 'Wait for Approval',
-                 style: TextStyle(
-                   fontWeight: FontWeight.w900,
-                   fontSize: 20.0,
-                 ),
-               ),
-               title: Text('Registration Successful!!'),
-               firstColor: Color(0xFF3CCF57),
-
-               secondColor: Colors.white,
-               headerIcon: Icon(
-                 Icons.check_circle_outline,
-                 size: 120.0,
-                 color: Colors.white,
-               ),
-             ),
-           );
-         }else{
-           setState(() {
-             setSnackbar(data['message'].toString(), context);
-           });
-         }
-
-       }else{
-         setState(() {
-           enabled =false;
-         });
-         final respStr = await res.stream.bytesToString();
-         print(respStr.toString());
-         Map data = jsonDecode(respStr.toString());
-         print(data);
-       }
+    request.send().then((res) async {
+      print("This is response:" + res.toString());
+      if (res.statusCode == 200) {
+        setState(() {
+          enabled = false;
+        });
+        final respStr = await res.stream.bytesToString();
+        print(respStr.toString());
+        Map data = jsonDecode(respStr.toString());
+        print(data);
+        if (!data['error']) {
+          setState(() {
+            setSnackbar(data['message'].toString(), context);
+          });
+          Navigator.pop(context);
+          showDialog(
+            context: context,
+            builder: (context) => CustomDialog(
+              content: Text(
+                'Wait for Approval',
+                style: TextStyle(
+                  fontWeight: FontWeight.w900,
+                  fontSize: 20.0,
+                ),
+              ),
+              title: Text('Registration Successful!!'),
+              firstColor: Color(0xFF3CCF57),
+              secondColor: Colors.white,
+              headerIcon: Icon(
+                Icons.check_circle_outline,
+                size: 120.0,
+                color: Colors.white,
+              ),
+            ),
+          );
+        } else {
+          setState(() {
+            setSnackbar(data['message'].toString(), context);
+          });
+        }
+      } else {
+        setState(() {
+          enabled = false;
+        });
+        final respStr = await res.stream.bytesToString();
+        print(respStr.toString());
+        Map data = jsonDecode(respStr.toString());
+        print(data);
+      }
     });
-
   }
 
   void requestPermission(BuildContext context, i) async {
@@ -1681,11 +1683,9 @@ class _SignUpScreenState extends State<SignUpScreen>
       if (statuses[Per.Permission.camera] == PermissionStatus.denied) {
         Per.openAppSettings();
         setSnackbar("Oops you just denied the permission", context);
-      }else{
+      } else {
         getImage(ImgSource.Both, context, i);
       }
-
-
     }
   }
 
@@ -1698,44 +1698,46 @@ class _SignUpScreenState extends State<SignUpScreen>
           height: 3.32.h,
         ),
         InkWell(
-          onTap: (){
+          onTap: () {
             requestPermission(context, 1);
           },
           child: Container(
             width: 80.w,
             padding: EdgeInsets.symmetric(vertical: 2.w, horizontal: 4.w),
-            decoration: boxDecoration(
-                bgColor: AppColor().colorEdit(), radius: 10),
+            decoration:
+                boxDecoration(bgColor: AppColor().colorEdit(), radius: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 logoImage != null
                     ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    text("Seller Logo",
-                        textColor: AppColor().colorPrimary(),
-                        fontSize: 12.sp),
-                    Container(
-                      width: 50.w,
-                      child: text(path.basename(logoImage!.path),
-                          textColor: AppColor().colorTextPrimary(),
-                          overFlow: true,
-                          fontSize: 10.sp,maxLine: 1),
-                    ),
-                  ],
-                )
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          text("Seller Logo",
+                              textColor: AppColor().colorPrimary(),
+                              fontSize: 12.sp),
+                          Container(
+                            width: 50.w,
+                            child: text(path.basename(logoImage!.path),
+                                textColor: AppColor().colorTextPrimary(),
+                                overFlow: true,
+                                fontSize: 10.sp,
+                                maxLine: 1),
+                          ),
+                        ],
+                      )
                     : text("Add Seller Logo",
-                    textColor: AppColor().colorPrimary(),
-                    fontSize: 12.sp),
-                logoImage != null?InkWell(
-                  onTap: (){
-                    showImage(logoImage);
-                  },
-                  child: text("View",
-                      textColor: AppColor().colorPrimary(),
-                      fontSize: 12.sp),
-                ):SizedBox(),
+                        textColor: AppColor().colorPrimary(), fontSize: 12.sp),
+                logoImage != null
+                    ? InkWell(
+                        onTap: () {
+                          showImage(logoImage);
+                        },
+                        child: text("View",
+                            textColor: AppColor().colorPrimary(),
+                            fontSize: 12.sp),
+                      )
+                    : SizedBox(),
               ],
             ),
           ),
@@ -1744,45 +1746,46 @@ class _SignUpScreenState extends State<SignUpScreen>
           height: 2.6.h,
         ),
         InkWell(
-          onTap: (){
+          onTap: () {
             requestPermission(context, 2);
           },
           child: Container(
             width: 80.w,
             padding: EdgeInsets.symmetric(vertical: 2.w, horizontal: 4.w),
-            decoration: boxDecoration(
-                bgColor: AppColor().colorEdit(), radius: 10),
+            decoration:
+                boxDecoration(bgColor: AppColor().colorEdit(), radius: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 gstImage != null
                     ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    text("Gst Image",
-                        textColor: AppColor().colorPrimary(),
-                        fontSize: 12.sp),
-                    Container(
-                      width: 50.w,
-                      child: text(path.basename(logoImage!.path),
-                          textColor: AppColor().colorTextPrimary(),
-                          overFlow: true,
-                          fontSize: 10.sp,maxLine: 1),
-                    ),
-                  ],
-                )
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          text("Gst Image",
+                              textColor: AppColor().colorPrimary(),
+                              fontSize: 12.sp),
+                          Container(
+                            width: 50.w,
+                            child: text(path.basename(logoImage!.path),
+                                textColor: AppColor().colorTextPrimary(),
+                                overFlow: true,
+                                fontSize: 10.sp,
+                                maxLine: 1),
+                          ),
+                        ],
+                      )
                     : text("Add Gst Image",
-                    textColor: AppColor().colorPrimary(),
-                    fontSize: 12.sp),
+                        textColor: AppColor().colorPrimary(), fontSize: 12.sp),
                 gstImage != null
-                    ?InkWell(
-                  onTap: (){
-                    showImage(gstImage);
-                  },
-                  child: text("View",
-                      textColor: AppColor().colorPrimary(),
-                      fontSize: 12.sp),
-                ):SizedBox(),
+                    ? InkWell(
+                        onTap: () {
+                          showImage(gstImage);
+                        },
+                        child: text("View",
+                            textColor: AppColor().colorPrimary(),
+                            fontSize: 12.sp),
+                      )
+                    : SizedBox(),
               ],
             ),
           ),
@@ -1791,45 +1794,46 @@ class _SignUpScreenState extends State<SignUpScreen>
           height: 2.6.h,
         ),
         InkWell(
-          onTap: (){
+          onTap: () {
             requestPermission(context, 3);
           },
           child: Container(
             width: 80.w,
             padding: EdgeInsets.symmetric(vertical: 2.w, horizontal: 4.w),
-            decoration: boxDecoration(
-                bgColor: AppColor().colorEdit(), radius: 10),
+            decoration:
+                boxDecoration(bgColor: AppColor().colorEdit(), radius: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 foodImage != null
                     ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    text("Food License Image",
-                        textColor: AppColor().colorPrimary(),
-                        fontSize: 12.sp),
-                    Container(
-                      width: 50.w,
-                      child: text(path.basename(logoImage!.path),
-                          textColor: AppColor().colorTextPrimary(),
-                          overFlow: true,
-                          fontSize: 10.sp,maxLine: 1),
-                    ),
-                  ],
-                )
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          text("Food License Image",
+                              textColor: AppColor().colorPrimary(),
+                              fontSize: 12.sp),
+                          Container(
+                            width: 50.w,
+                            child: text(path.basename(logoImage!.path),
+                                textColor: AppColor().colorTextPrimary(),
+                                overFlow: true,
+                                fontSize: 10.sp,
+                                maxLine: 1),
+                          ),
+                        ],
+                      )
                     : text("Add Food License Image",
-                    textColor: AppColor().colorPrimary(),
-                    fontSize: 12.sp),
+                        textColor: AppColor().colorPrimary(), fontSize: 12.sp),
                 foodImage != null
-                    ?InkWell(
-                  onTap: (){
-                    showImage(foodImage);
-                  },
-                  child: text("View",
-                      textColor: AppColor().colorPrimary(),
-                      fontSize: 12.sp),
-                ):SizedBox(),
+                    ? InkWell(
+                        onTap: () {
+                          showImage(foodImage);
+                        },
+                        child: text("View",
+                            textColor: AppColor().colorPrimary(),
+                            fontSize: 12.sp),
+                      )
+                    : SizedBox(),
               ],
             ),
           ),
@@ -1838,45 +1842,46 @@ class _SignUpScreenState extends State<SignUpScreen>
           height: 2.6.h,
         ),
         InkWell(
-          onTap: (){
+          onTap: () {
             requestPermission(context, 4);
           },
           child: Container(
             width: 80.w,
             padding: EdgeInsets.symmetric(vertical: 2.w, horizontal: 4.w),
-            decoration: boxDecoration(
-                bgColor: AppColor().colorEdit(), radius: 10),
+            decoration:
+                boxDecoration(bgColor: AppColor().colorEdit(), radius: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 proofImage != null
                     ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    text("National Identity Image",
-                        textColor: AppColor().colorPrimary(),
-                        fontSize: 12.sp),
-                    Container(
-                      width: 50.w,
-                      child: text(path.basename(logoImage!.path),
-                          textColor: AppColor().colorTextPrimary(),
-                          overFlow: true,
-                          fontSize: 10.sp,maxLine: 1),
-                    ),
-                  ],
-                )
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          text("National Identity Image",
+                              textColor: AppColor().colorPrimary(),
+                              fontSize: 12.sp),
+                          Container(
+                            width: 50.w,
+                            child: text(path.basename(logoImage!.path),
+                                textColor: AppColor().colorTextPrimary(),
+                                overFlow: true,
+                                fontSize: 10.sp,
+                                maxLine: 1),
+                          ),
+                        ],
+                      )
                     : text("Add National Identity Image",
-                    textColor: AppColor().colorPrimary(),
-                    fontSize: 12.sp),
+                        textColor: AppColor().colorPrimary(), fontSize: 12.sp),
                 proofImage != null
-                    ?InkWell(
-                  onTap: (){
-                    showImage(proofImage);
-                  },
-                  child: text("View",
-                      textColor: AppColor().colorPrimary(),
-                      fontSize: 12.sp),
-                ):SizedBox(),
+                    ? InkWell(
+                        onTap: () {
+                          showImage(proofImage);
+                        },
+                        child: text("View",
+                            textColor: AppColor().colorPrimary(),
+                            fontSize: 12.sp),
+                      )
+                    : SizedBox(),
               ],
             ),
           ),
@@ -1885,45 +1890,46 @@ class _SignUpScreenState extends State<SignUpScreen>
           height: 2.6.h,
         ),
         InkWell(
-          onTap: (){
+          onTap: () {
             requestPermission(context, 5);
           },
           child: Container(
             width: 80.w,
             padding: EdgeInsets.symmetric(vertical: 2.w, horizontal: 4.w),
-            decoration: boxDecoration(
-                bgColor: AppColor().colorEdit(), radius: 10),
+            decoration:
+                boxDecoration(bgColor: AppColor().colorEdit(), radius: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 addressImage != null
                     ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    text("Address Proof Image",
-                        textColor: AppColor().colorPrimary(),
-                        fontSize: 12.sp),
-                    Container(
-                      width: 50.w,
-                      child: text(path.basename(logoImage!.path),
-                          textColor: AppColor().colorTextPrimary(),
-                          overFlow: true,
-                          fontSize: 10.sp,maxLine: 1),
-                    ),
-                  ],
-                )
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          text("Address Proof Image",
+                              textColor: AppColor().colorPrimary(),
+                              fontSize: 12.sp),
+                          Container(
+                            width: 50.w,
+                            child: text(path.basename(logoImage!.path),
+                                textColor: AppColor().colorTextPrimary(),
+                                overFlow: true,
+                                fontSize: 10.sp,
+                                maxLine: 1),
+                          ),
+                        ],
+                      )
                     : text("Add Address Proof Image",
-                    textColor: AppColor().colorPrimary(),
-                    fontSize: 12.sp),
+                        textColor: AppColor().colorPrimary(), fontSize: 12.sp),
                 addressImage != null
-                    ?InkWell(
-                  onTap: (){
-                    showImage(addressImage);
-                  },
-                  child: text("View",
-                      textColor: AppColor().colorPrimary(),
-                      fontSize: 12.sp),
-                ):SizedBox(),
+                    ? InkWell(
+                        onTap: () {
+                          showImage(addressImage);
+                        },
+                        child: text("View",
+                            textColor: AppColor().colorPrimary(),
+                            fontSize: 12.sp),
+                      )
+                    : SizedBox(),
               ],
             ),
           ),
@@ -1932,9 +1938,9 @@ class _SignUpScreenState extends State<SignUpScreen>
           height: 2.6.h,
         ),
         InkWell(
-          onTap: (){
+          onTap: () {
             setState(() {
-              accept=!accept;
+              accept = !accept;
             });
           },
           child: Container(
@@ -1943,15 +1949,19 @@ class _SignUpScreenState extends State<SignUpScreen>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Icon(!accept?Icons.check_box_outline_blank:Icons.check_box,color: MyColor.primary,),
-                SizedBox(width: 10,),
+                Icon(
+                  !accept ? Icons.check_box_outline_blank : Icons.check_box,
+                  color: MyColor.primary,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
                 InkWell(
-                  onTap: (){
+                  onTap: () {
                     OpenFile.open(filePath);
                   },
                   child: text("Accept terms and conditions",
-                      textColor: AppColor().colorPrimary(),
-                      fontSize: 12.sp),
+                      textColor: AppColor().colorPrimary(), fontSize: 12.sp),
                 )
               ],
             ),
@@ -1963,16 +1973,23 @@ class _SignUpScreenState extends State<SignUpScreen>
       ],
     );
   }
-  bool accept = false;
-  showImage(File? image){
-    showModalBottomSheet(context: context, builder: (BuildContext context1){
-      return Container(
-          width: 100.w,height:50.h ,
-          padding: EdgeInsets.all(5.w),
-          child: Image.file(image!,fit: BoxFit.fill,));
-    });
 
+  bool accept = false;
+  showImage(File? image) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context1) {
+          return Container(
+              width: 100.w,
+              height: 50.h,
+              padding: EdgeInsets.all(5.w),
+              child: Image.file(
+                image!,
+                fit: BoxFit.fill,
+              ));
+        });
   }
+
   ApiBaseHelper apiBase = new ApiBaseHelper();
   bool isNetwork = false;
   addUser() async {
@@ -2058,13 +2075,12 @@ class _SignUpScreenState extends State<SignUpScreen>
 
           _getAddress(_currentPosition.latitude, _currentPosition.longitude)
               .then((value) {
-                if(mounted){
-                  setState(() {
-                    _address = "${value.first.addressLine}";
-                    firstLocation = value.first.subLocality.toString();
-                  });
-                }
-
+            if (mounted) {
+              setState(() {
+                _address = "${value.first.addressLine}";
+                firstLocation = value.first.subLocality.toString();
+              });
+            }
           });
         });
       }

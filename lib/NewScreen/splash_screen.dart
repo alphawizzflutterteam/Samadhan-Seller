@@ -14,7 +14,6 @@ import 'package:ziberto_vendor/Helper/images.dart';
 import 'package:ziberto_vendor/NewScreen/bottom_bar.dart';
 import 'package:ziberto_vendor/NewScreen/home_screen.dart';
 import 'package:ziberto_vendor/NewScreen/login_screen.dart';
-import 'package:ziberto_vendor/Screen/Home.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);

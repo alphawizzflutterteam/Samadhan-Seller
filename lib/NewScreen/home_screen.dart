@@ -21,12 +21,12 @@ import 'package:ziberto_vendor/Model/OrdersModel/OrderModel.dart';
 import 'package:ziberto_vendor/NewScreen/payment_screen.dart';
 import 'package:ziberto_vendor/NewScreen/service_details_screen.dart';
 import 'package:ziberto_vendor/Screen/Customers.dart';
-import 'package:ziberto_vendor/Screen/Home.dart';
 import 'package:ziberto_vendor/Screen/OrderList.dart';
 import 'package:ziberto_vendor/Screen/ProductList.dart';
 import 'package:ziberto_vendor/Screen/WalletHistory.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import '../Model/SellerStatusModel.dart';
+import '../Model/ZipCodesModel/ZipCodeModel.dart';
 import 'main_order_history.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -35,6 +35,18 @@ class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
+
+
+int? total, offset;
+List<Order_Model> orderList = [];
+bool _isLoading = true;
+bool isLoadingmore = true;
+// List<PersonModel> delBoyList = [];
+List<ZipCodeModel> zipCodeList = [];
+List<CategoryModel> catagoryList = [];
+String? delPermission;
+ApiBaseHelper apiBaseHelper = ApiBaseHelper();
+
 
 class _HomeScreenState extends State<HomeScreen> {
   ApiBaseHelper apiBaseHelper = ApiBaseHelper();
@@ -63,6 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int curChart = 0;
   Map<int, LineChartData>? chartList;
   List? days = [], dayEarning = [];
+
   List? months = [], monthEarning = [];
   List? weeks = [], weekEarning = [];
   List? catCountList = [], catList = [];
@@ -142,12 +155,39 @@ class _HomeScreenState extends State<HomeScreen> {
     scrollController!.addListener(_transactionscrollListener);
     chartList = {0: dayData(), 1: weekData(), 2: monthData()};
     getCheckStatusApi();
+    getZipCodes();
     getFid();
     getSaveDetail();
     getStatics();
     getSallerDetail();
     getCategories();
     getOrder();
+  }
+
+  Future<void> getZipCodes() async {
+    var parameter = {};
+    apiBaseHelper.postAPICall(getZipcodesApi, parameter).then(
+      (getdata) async {
+        bool error = getdata["error"];
+        String? msg = getdata["message"];
+        print("naman" + getdata.toString());
+        if (!error) {
+          zipCodeList.clear();
+
+          var data = getdata["data"];
+
+          zipCodeList = (data as List)
+              .map((data) => new ZipCodeModel.fromJson(data))
+              .toList();
+          print("Zip code list : ${zipCodeList.length}");
+        } else {
+          setSnackbar(msg!, context);
+        }
+      },
+      onError: (error) {
+        setSnackbar(error.toString(), context);
+      },
+    );
   }
 
   Future<void> getCategories() async {

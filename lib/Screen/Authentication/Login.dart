@@ -5,12 +5,12 @@ import 'package:ziberto_vendor/Helper/Color.dart';
 import 'package:ziberto_vendor/Helper/ContainerDesing.dart';
 import 'package:ziberto_vendor/Helper/Session.dart';
 import 'package:ziberto_vendor/Helper/String.dart';
+import 'package:ziberto_vendor/NewScreen/home_screen.dart';
 import 'package:ziberto_vendor/Screen/TermFeed/Privacy_Policy.dart';
 import 'package:ziberto_vendor/Screen/TermFeed/Terms_Conditions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-import '../Home.dart';
 import 'SendOtp.dart';
 
 class Login extends StatefulWidget {
@@ -292,7 +292,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => Home(),
+              builder: (context) => HomeScreen(),
             ),
           );
         } else {
@@ -642,3 +642,4 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
     );
   }
 }
+
