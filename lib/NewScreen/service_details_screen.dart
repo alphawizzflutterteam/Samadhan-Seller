@@ -602,12 +602,21 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
                                         children: [
                                           Text("Price : "),
                                           Text('₹ ' +
-                                              tempList
-                                                  .where((element) =>
-                                                      element.id == widget.id)
-                                                  .first
-                                                  .subTotal
-                                                  .toString()),
+                                              (double.parse(tempList
+                                                          .where((element) =>
+                                                              element.id ==
+                                                              widget.id)
+                                                          .first
+                                                          .subTotal
+                                                          .toString()) -
+                                                      double.parse(tempList
+                                                          .where((element) =>
+                                                              element.id ==
+                                                              widget.id)
+                                                          .first
+                                                          .taxAmt
+                                                          .toString()))
+                                                  .toStringAsFixed(2)),
                                         ],
                                       ),
                                       Row(
@@ -1307,7 +1316,10 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
                                       height: 1.02.h,
                                     ),
                                     text(
-                                      curStatus.toString().toUpperCase(),
+                                      curStatus.toString().toUpperCase() ==
+                                              'SHIPPED'
+                                          ? "DISPATCH"
+                                          : "",
                                       textColor: Color(0xff8A8787),
                                       fontSize: 10.5.sp,
                                       fontFamily: fontRegular,
@@ -1337,7 +1349,9 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               text(
-                                                deliveryStatus,
+                                                deliveryStatus == 'shipped'
+                                                    ? 'dispatch'
+                                                    : deliveryStatus,
                                                 fontSize: 10.sp,
                                                 fontFamily: fontMedium,
                                                 textColor: AppColor()
@@ -1393,7 +1407,11 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
                                                       vertical: 1.09.h),
                                                   child: text(
                                                     statusList[index]
-                                                        .toString(),
+                                                                .toString() ==
+                                                            'shipped'
+                                                        ? "dispatch"
+                                                        : statusList[index]
+                                                            .toString(),
                                                     fontSize: 10.sp,
                                                     fontFamily: fontMedium,
                                                     textColor: AppColor()
